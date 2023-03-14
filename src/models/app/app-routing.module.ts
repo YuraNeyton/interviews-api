@@ -1,14 +1,10 @@
 import { Module } from '@nestjs/common';
 import { RouterModule, Routes } from '@nestjs/core';
 
-import { AuthenticationModule } from './authentication';
+import { AuthModule } from '../auth';
 
 const ROUTES: Routes = [
-  {
-    path: 'api', children: [
-      { path: 'auth', module: AuthenticationModule }
-    ]
-  }
+  { path: 'auth', module: AuthModule }
 ];
 
 @Module({
