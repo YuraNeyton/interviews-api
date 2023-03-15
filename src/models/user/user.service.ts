@@ -15,6 +15,10 @@ export class UserService {
   }
 
   async isEmailExist(email: string): Promise<boolean> {
-    return !await this.userModel.findOne({ email });
+    return !await this.findOneByEmail(email);
+  }
+
+  async findOneByEmail(email: string): Promise<UserDocument> {
+    return this.userModel.findOne({ email });
   }
 }

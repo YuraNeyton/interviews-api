@@ -1,8 +1,11 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiOkResponse } from '@nestjs/swagger';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
 
+import { ApiResponse, BadRequestException, NotFoundException } from '../../common';
+
+import { SignInDto, SignUpDto } from './dto';
+import { AuthorizationTokens } from './interfaces';
 import { AuthService } from './services';
-import { SignUpDto } from './dto';
 
 @Controller()
 export class AuthController {
@@ -10,19 +13,28 @@ export class AuthController {
   }
 
   @Post('signUp')
-  @ApiOkResponse({ description: 'successful registration' })
-  @ApiBadRequestResponse({ description: 'this email already exists or invalid format of email' })
+  @ApiOkResponse({ description: 'Successful registration' })
+  @ApiBadRequestResponse({ description: 'This email already exists or invalid format of email' })
   async signUp(@Body() credentials: SignUpDto): Promise<void> {
     try {
       await this.authService.signUp(credentials);
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException();
     }
   }
 
-  @Get('signIn')
-  signIn(): string {
-    return 'signIn';
+  @Post('signIn')
+  @ApiOkResponse({ description: 'Successful signIn' })
+  @ApiNotFoundResponse({ description: 'Login or password do not match' })
+  async signIn(@Body() credentials: SignInDto): Promise<ApiResponse<AuthorizationTokens>> {
+    try {
+      const authorizationTokens = await this.authService.signIn(credentials);
+      return {
+        data: authorizationTokens
+      };
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException();
+    }
   }
 }
