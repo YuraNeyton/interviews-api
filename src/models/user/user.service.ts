@@ -13,4 +13,8 @@ export class UserService {
   async create(user: CreateUserDto): Promise<void> {
     await this.userModel.create(user);
   }
+
+  async isEmailExist(email: string): Promise<boolean> {
+    return !await this.userModel.findOne({ email });
+  }
 }
