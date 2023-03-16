@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 
-import { AccessTokenPayload } from '../interfaces';
+import { TokenType } from '../../../common';
+
+import { TokenPayload } from '../interfaces';
 
 @Injectable()
 export class JwtService {
@@ -18,23 +20,41 @@ export class JwtService {
     this.REFRESH_TOKEN_EXPIRATION = Number(this.configService.get<string>('refresh_token_expiration'));
   }
 
-  async generateAccessToken(payload: AccessTokenPayload): Promise<string> {
+  generateToken(payload: TokenPayload, type: TokenType): string {
     const iat = this.generateIat();
-    const expiresIn = this.ACCESS_TOKEN_EXPIRATION * 60;
-    const payloadWithTime = { ...payload, iat };
+    const expiresIn = this.getTokenExp(type);
+    const secret = this.getTokenSecret(type);
+    const payloadWithIat = { ...payload, iat };
 
-    return jwt.sign(payloadWithTime, this.ACCESS_TOKEN_SECRET, { expiresIn });
+    return jwt.sign(payloadWithIat, secret, { expiresIn });
   }
 
-  async generateRefreshToken(): Promise<string> {
-    const iat = this.generateIat();
-    const expiresIn = this.REFRESH_TOKEN_EXPIRATION * 60 * 4 * 360;
-    const payload = { iat };
-
-    return jwt.sign(payload, this.REFRESH_TOKEN_SECRET, { expiresIn });
+  validate(token: string, type: TokenType): TokenPayload {
+    return jwt.verify(token, this.getTokenSecret(type)) as TokenPayload;
   }
 
   private generateIat(): number {
-    return Math.floor(Date.now() / 1000) - 30;
+    return Math.floor(Date.now() / 1000) - 30; // 30 ces
+  }
+
+  private getTokenExp(type: TokenType): number {
+    const defaultExp = 900; // default 15 min
+    const expMap = {
+      [TokenType.ACCESS]: this.ACCESS_TOKEN_EXPIRATION * 60, // 15 min
+      [TokenType.REFRESH]: this.REFRESH_TOKEN_EXPIRATION * 60 * 4 * 360 // 15 days
+    };
+
+    return expMap[type] || defaultExp;
+  }
+
+  private getTokenSecret(type: TokenType): string {
+    const defaultSecret = this.ACCESS_TOKEN_SECRET;
+    const secretMap = {
+      [TokenType.ACCESS]: this.ACCESS_TOKEN_SECRET,
+      [TokenType.REFRESH]: this.REFRESH_TOKEN_SECRET
+    };
+
+    return secretMap[type] || defaultSecret;
   }
 }
+

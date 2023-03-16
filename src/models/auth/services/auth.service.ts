@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { UserRole, NotFoundException } from '../../../common';
+import { TokenType, UserRole } from '../../../common';
 
 import { RoleService } from '../../role';
 import { UserService } from '../../user';
 
 import { SignInDto, SignUpDto } from '../dto';
-import { AuthorizationTokens } from '../interfaces';
+import { AccessToken, AuthorizationTokens } from '../interfaces';
 import { HashService } from './hash.service';
 import { JwtService } from './jwt.service';
 
@@ -39,9 +39,25 @@ export class AuthService {
       throw new NotFoundException();
     }
 
-    const accessToken = await this.jwtService.generateAccessToken({ id: foundUser.id, roles: foundUser.roles });
-    const refreshToken = await this.jwtService.generateRefreshToken();
+    const accessToken = this.jwtService.generateToken(
+      {
+        id: foundUser.id,
+        roles: foundUser.roles
+      },
+      TokenType.ACCESS
+    );
+    const refreshToken = this.jwtService.generateToken(
+      { id: foundUser.id },
+      TokenType.REFRESH
+    );
 
     return { accessToken, refreshToken };
+  }
+
+  async refresh(token: string): Promise<AccessToken> {
+    const { exp, ...tokenPayloadWithoutExp } = this.jwtService.validate(token, TokenType.REFRESH);
+    const accessToken = this.jwtService.generateToken(tokenPayloadWithoutExp, TokenType.ACCESS);
+
+    return { accessToken };
   }
 }

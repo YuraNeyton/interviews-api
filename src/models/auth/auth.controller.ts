@@ -1,10 +1,23 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Post,
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException
+} from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse
+} from '@nestjs/swagger';
 
-import { ApiResponse, BadRequestException, NotFoundException } from '../../common';
+import { ApiResponse } from '../../common';
 
 import { SignInDto, SignUpDto } from './dto';
-import { AuthorizationTokens } from './interfaces';
+import { AccessToken, AuthorizationTokens } from './interfaces';
+import { GetJwt } from './decorators';
 import { AuthService } from './services';
 
 @Controller()
@@ -24,17 +37,30 @@ export class AuthController {
   }
 
   @Post('signIn')
-  @ApiOkResponse({ description: 'Successful signIn' })
+  @ApiOkResponse({ description: 'Successful signIn', type: ApiResponse<AuthorizationTokens> })
   @ApiNotFoundResponse({ description: 'Login or password do not match' })
-  async signIn(@Body() credentials: SignInDto): Promise<ApiResponse<AuthorizationTokens>> {
+  async signIn(@Body() credentials: SignInDto): Promise<ApiResponse<AccessToken>> {
     try {
       const authorizationTokens = await this.authService.signIn(credentials);
       return {
         data: authorizationTokens
       };
     } catch (error) {
-      console.log(error);
       throw new NotFoundException();
+    }
+  }
+
+  @Post('refresh')
+  @ApiOkResponse({ description: 'Successful token regeneration' })
+  @ApiForbiddenResponse({ description: 'The refresh token may be invalid' })
+  async refresh(@GetJwt() refresh: string): Promise<ApiResponse<AccessToken>> {
+    try {
+      const accessToken = await this.authService.refresh(refresh);
+      return {
+        data: accessToken
+      };
+    } catch (error) {
+      throw new ForbiddenException();
     }
   }
 }

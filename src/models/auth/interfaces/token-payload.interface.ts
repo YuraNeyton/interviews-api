@@ -1,10 +1,10 @@
 import { Role } from '../../role';
 
-export interface AccessTokenPayload {
+export interface TokenPayload {
   id: string;
 
   iat?: number;
 
   exp?: number;
-  roles: Role[];
+  roles?: Role[];
 }
