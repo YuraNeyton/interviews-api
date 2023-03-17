@@ -1,4 +1,4 @@
-import { Role } from '../../role';
+import { UserRole } from '../../../common';
 
 export interface TokenPayload {
   id: string;
@@ -6,5 +6,5 @@ export interface TokenPayload {
   iat?: number;
 
   exp?: number;
-  roles?: Role[];
+  roles?: UserRole[];
 }

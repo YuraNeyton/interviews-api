@@ -4,12 +4,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { appConfig } from '../../config';
 
-import { AuthModule } from '../auth';
 import { AppRoutingModule } from './app-routing.module';
 
 @Module({
   imports: [
-    AuthModule,
     AppRoutingModule,
     ConfigModule.forRoot({
       isGlobal: true,
@@ -22,7 +20,7 @@ import { AppRoutingModule } from './app-routing.module';
       }),
       inject: [ConfigService]
     })
-  ]
+  ],
 })
 export class AppModule {
 }

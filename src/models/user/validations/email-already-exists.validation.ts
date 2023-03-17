@@ -5,7 +5,7 @@ import {
   ValidatorConstraintInterface
 } from 'class-validator';
 
-import { UserService } from '../../../user';
+import { UserService } from '../user.service';
 
 @ValidatorConstraint({ name: 'IsEmailAlreadyExists', async: true })
 @Injectable()

@@ -1,6 +1,6 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
 
-import { EmailAlreadyExists } from './validations';
+import { EmailAlreadyExists } from '../validations';
 
 export const IsEmailAlreadyExists = (validationOptions?: ValidationOptions) => {
   return (object: any, propertyName: string) => {
