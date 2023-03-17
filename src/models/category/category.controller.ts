@@ -1,10 +1,10 @@
 import {
   Body,
   Controller,
-  UseGuards,
   Get,
   Post,
   Put,
+  UseGuards,
   InternalServerErrorException
 } from '@nestjs/common';
 import {
@@ -14,7 +14,12 @@ import {
   ApiOkResponse
 } from '@nestjs/swagger';
 
-import { ApiResponse, JwtAuthGuard } from '../../common';
+import {
+  ApiResponse,
+  JwtAuthGuard,
+  RoleGuard,
+  UserRole
+} from '../../common';
 
 import { CreateCategoryDto } from './dto';
 import { Category } from './schemas';
@@ -25,7 +30,7 @@ export class CategoryController {
   // }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard(UserRole.ADMIN))
   @ApiOkResponse({ description: 'Successful save' })
   @ApiForbiddenResponse({ description: 'No access, missing token, or invalid role' })
   @ApiBadRequestResponse({ description: 'The category did not pass validation' })
@@ -39,7 +44,7 @@ export class CategoryController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard(UserRole.ADMIN))
   @ApiOkResponse({ description: 'Successful get all categories', type: ApiResponse<Category[]> })
   @ApiInternalServerErrorResponse({ description: 'Some database problem, such as a broken connection' })
   @ApiForbiddenResponse({ description: 'No access, missing token, or invalid role' })
@@ -55,7 +60,7 @@ export class CategoryController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard(UserRole.ADMIN))
   @ApiOkResponse({ description: 'Successful token regeneration' })
   @ApiForbiddenResponse({ description: 'The refresh token may be invalid' })
   @ApiBadRequestResponse({ description: 'The category did not pass validation' })
