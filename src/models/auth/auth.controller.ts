@@ -32,10 +32,9 @@ export class AuthController {
   @ApiOkResponse({ description: 'Successful signIn', type: ApiResponse<AuthorizationTokens> })
   @ApiNotFoundResponse({ description: 'Login or password do not match' })
   async signIn(@Body() credentials: SignInDto): Promise<ApiResponse<AccessToken>> {
-    const authorizationTokens = await this.authService.signIn(credentials);
-
+    console.log(credentials);
     return {
-      data: authorizationTokens
+      data: await this.authService.signIn(credentials)
     };
   }
 
@@ -43,10 +42,8 @@ export class AuthController {
   @ApiOkResponse({ description: 'Successful token regeneration' })
   @ApiForbiddenResponse({ description: 'The refresh token may be invalid' })
   async refresh(@GetJwt() refresh: string): Promise<ApiResponse<AccessToken>> {
-    const accessToken = await this.authService.refresh(refresh);
-
     return {
-      data: accessToken
+      data: await this.authService.refresh(refresh)
     };
   }
 }

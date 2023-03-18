@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { JwtAuthGuard } from './guards';
+import { ParseObjectId } from './pipes';
 import { HashService, JwtService } from './services';
 
 @Module({
@@ -8,12 +9,14 @@ import { HashService, JwtService } from './services';
   providers: [
     HashService,
     JwtService,
-    JwtAuthGuard
+    JwtAuthGuard,
+    ParseObjectId
   ],
   exports: [
     HashService,
     JwtService,
-    JwtAuthGuard
+    JwtAuthGuard,
+    ParseObjectId
   ]
 })
 export class CommonModule {

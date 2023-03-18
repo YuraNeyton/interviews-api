@@ -48,17 +48,10 @@ export class AuthService {
       throw new NotFoundException();
     }
 
-    const accessToken = this.jwtService.generateToken(
-      {
-        id: foundUser.id,
-        roles: foundUser.roles
-      },
-      TokenType.ACCESS
-    );
-    const refreshToken = this.jwtService.generateToken(
-      { id: foundUser.id },
-      TokenType.REFRESH
-    );
+    const payload = { id: foundUser.id, roles: foundUser.roles };
+
+    const accessToken = this.jwtService.generateToken(payload, TokenType.ACCESS);
+    const refreshToken = this.jwtService.generateToken(payload, TokenType.REFRESH);
 
     return { accessToken, refreshToken };
   }
