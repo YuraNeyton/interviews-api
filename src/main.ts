@@ -9,7 +9,7 @@ import { AppModule } from './models';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
-  // app.enableCors({ origin: '*' });
+  app.enableCors({ origin: true, credentials: true });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
