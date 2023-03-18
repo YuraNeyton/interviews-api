@@ -32,7 +32,6 @@ export class AuthController {
   @ApiOkResponse({ description: 'Successful signIn', type: ApiResponse<AuthorizationTokens> })
   @ApiNotFoundResponse({ description: 'Login or password do not match' })
   async signIn(@Body() credentials: SignInDto): Promise<ApiResponse<AccessToken>> {
-    console.log(credentials);
     return {
       data: await this.authService.signIn(credentials)
     };
