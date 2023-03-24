@@ -6,25 +6,31 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
-  ApiOkResponse
+  ApiOkResponse,
+  ApiQuery
 } from '@nestjs/swagger';
 import { Types } from 'mongoose';
 
 import {
+  RoleGuard,
   ApiResponse,
   JwtAuthGuard,
-  RoleGuard,
   UserRole,
   ParseObjectId
 } from '../../common';
 
-import { CreateQuestion, UpdateQuestion } from './dto';
+import {
+  CreateQuestion,
+  QuestionQuery,
+  UpdateQuestion
+} from './dto';
 import { IsQuestionExists } from './pipes';
 import { Question } from './schemas';
 import { QuestionService } from './question.service';
@@ -45,11 +51,12 @@ export class QuestionController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
+  @ApiQuery({ schema: new QuestionQuery })
   @ApiOkResponse({ description: 'Successful get all questions', type: ApiResponse<Question[]> })
   @ApiForbiddenResponse({ description: 'No access, missing token, or invalid role' })
-  async findAll(): Promise<ApiResponse<Question[]>> {
+  async findAll(@Query() query: QuestionQuery): Promise<ApiResponse<Question[]>> {
     return {
-      data: await this.questionService.findAll()
+      data: await this.questionService.findAll(query)
     };
   }
 
