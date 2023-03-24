@@ -12,7 +12,7 @@ import {
 
 import { ApiResponse, GetJwt } from '../../common';
 
-import { SignInDto, SignUpDto } from './dto';
+import { SignIn, SignUp } from './dto';
 import { AccessToken, AuthorizationTokens } from './interfaces';
 import { AuthService } from './services';
 
@@ -21,17 +21,17 @@ export class AuthController {
   constructor(private authService: AuthService) {
   }
 
-  @Post('signUp')
+  @Post('sign-up')
   @ApiOkResponse({ description: 'Successful registration' })
   @ApiBadRequestResponse({ description: 'This email already exists or invalid format of email' })
-  async signUp(@Body() credentials: SignUpDto): Promise<void> {
+  async signUp(@Body() credentials: SignUp): Promise<void> {
     await this.authService.signUp(credentials);
   }
 
-  @Post('signIn')
-  @ApiOkResponse({ description: 'Successful signIn', type: ApiResponse<AuthorizationTokens> })
+  @Post('sign-in')
+  @ApiOkResponse({ description: 'Successful login', type: ApiResponse<AuthorizationTokens> })
   @ApiNotFoundResponse({ description: 'Login or password do not match' })
-  async signIn(@Body() credentials: SignInDto): Promise<ApiResponse<AccessToken>> {
+  async signIn(@Body() credentials: SignIn): Promise<ApiResponse<AccessToken>> {
     return {
       data: await this.authService.signIn(credentials)
     };

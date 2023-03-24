@@ -6,17 +6,16 @@ import {
 } from '@nestjs/common';
 import { Types } from 'mongoose';
 
-import { CategoryService } from '../category.service';
+import { QuestionService } from '../question.service';
 
 @Injectable()
-export class IsCategoryExists implements PipeTransform {
+export class IsQuestionExists implements PipeTransform {
 
-  constructor(private categoryService: CategoryService) {
+  constructor(private questionService: QuestionService) {
   }
 
   async transform(_id: Types.ObjectId, metadata: ArgumentMetadata): Promise<Types.ObjectId> {
-    const isExists = await this.categoryService.exists({ _id });
-
+    const isExists = await this.questionService.exists({ _id });
     if (!isExists) {
       throw new NotFoundException();
     }

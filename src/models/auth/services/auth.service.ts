@@ -14,7 +14,7 @@ import {
 
 import { UserService } from '../../user';
 
-import { SignInDto, SignUpDto } from '../dto';
+import { SignIn, SignUp } from '../dto';
 import { AccessToken, AuthorizationTokens } from '../interfaces';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class AuthService {
   ) {
   }
 
-  async signUp({ email, password }: SignUpDto): Promise<void> {
+  async signUp({ email, password }: SignUp): Promise<void> {
     try {
       const hashedPassword = await this.hashService.hashPassword(password);
       await this.userService.create({ email, password: hashedPassword, roles: [UserRole.USER] });
@@ -35,7 +35,7 @@ export class AuthService {
     }
   }
 
-  async signIn({ email, password }: SignInDto): Promise<AuthorizationTokens> {
+  async signIn({ email, password }: SignIn): Promise<AuthorizationTokens> {
     const foundUser = await this.userService.findOneByEmail(email);
 
     if (!foundUser) {

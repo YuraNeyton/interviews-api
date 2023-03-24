@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import * as mongoose from 'mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Schema as SchemaTypes } from 'mongoose';
 
 import { DevelopmentDirection, LevelOfPreparation } from '../../../common';
 
@@ -16,7 +15,7 @@ export class Question {
   @Prop()
   body: string;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Categories' }] })
+  @Prop({ type: [{ type: SchemaTypes.Types.ObjectId, ref: 'Category' }] })
   categories: Category[]
 
   @Prop()

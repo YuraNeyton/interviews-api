@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
+import { ObjectMap } from '../../common';
+
 import { CreateUserDto } from './dto';
 import { User, UserDocument } from './schemas';
 
@@ -14,11 +16,11 @@ export class UserService {
     await this.userModel.create(user);
   }
 
-  async isEmailExist(email: string): Promise<boolean> {
-    return !await this.findOneByEmail(email);
-  }
-
   async findOneByEmail(email: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ email });
+  }
+
+  async exists(filter: ObjectMap): Promise<boolean> {
+    return !!await this.userModel.exists(filter);
   }
 }

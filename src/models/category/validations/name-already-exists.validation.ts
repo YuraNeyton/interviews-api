@@ -14,7 +14,7 @@ export class NameAlreadyExists implements ValidatorConstraintInterface {
   }
 
   async validate(name: string): Promise<boolean> {
-    return this.categoryService.isNameExist(name);
+    return !await this.categoryService.exists({ name });
   }
 
   defaultMessage(args: ValidationArguments): string {

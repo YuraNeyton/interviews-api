@@ -3,7 +3,7 @@ import { IsEmail, IsString, MinLength } from 'class-validator';
 
 import { IsEmailAlreadyExists } from '../../user';
 
-export class SignUpDto {
+export class SignUp {
   @ApiProperty()
   @IsEmail()
   @IsEmailAlreadyExists()

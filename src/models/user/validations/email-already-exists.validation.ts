@@ -14,7 +14,7 @@ export class EmailAlreadyExists implements ValidatorConstraintInterface {
   }
 
   async validate(email: string): Promise<boolean> {
-    return this.userService.isEmailExist(email);
+    return !await this.userService.exists({ email });
   }
 
   defaultMessage(args: ValidationArguments): string {

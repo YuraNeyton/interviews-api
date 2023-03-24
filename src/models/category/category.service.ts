@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
-import { CreateCategoryDto, UpdateCategoryDto } from './dto';
+import { ObjectMap } from '../../common';
+
+import { CreateCategory, UpdateCategory } from './dto';
 import { Category, CategoryDocument } from './schemas';
 
 @Injectable()
@@ -10,11 +12,11 @@ export class CategoryService {
   constructor(@InjectModel(Category.name) private categoryModel: Model<CategoryDocument>) {
   }
 
-  async create(category: CreateCategoryDto): Promise<void> {
+  async create(category: CreateCategory): Promise<void> {
     await this.categoryModel.create(category);
   }
 
-  async update(_id: Types.ObjectId, valuesToUpdate: UpdateCategoryDto): Promise<void> {
+  async update(_id: Types.ObjectId, valuesToUpdate: UpdateCategory): Promise<void> {
     await this.categoryModel.updateOne({ _id }, valuesToUpdate);
   }
 
@@ -26,7 +28,11 @@ export class CategoryService {
     return this.categoryModel.findById(id);
   }
 
-  async isNameExist(name: string): Promise<boolean> {
-    return !await this.categoryModel.findOne({ name });
+  async exists(filter: ObjectMap): Promise<boolean> {
+    return !!await this.categoryModel.exists(filter);
+  }
+
+  async remove(filter: ObjectMap): Promise<void> {
+    return this.categoryModel.remove(filter);
   }
 }

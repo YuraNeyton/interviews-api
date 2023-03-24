@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -10,7 +11,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
-  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
   ApiOkResponse
 } from '@nestjs/swagger';
 import { Types } from 'mongoose';
@@ -23,10 +24,10 @@ import {
   ParseObjectId
 } from '../../common';
 
-import { CategoryService } from './category.service';
-import { CreateCategoryDto, UpdateCategoryDto } from './dto';
+import { CreateCategory, UpdateCategory } from './dto';
 import { IsCategoryExists } from './pipes';
 import { Category } from './schemas';
+import { CategoryService } from './category.service';
 
 @Controller()
 export class CategoryController {
@@ -38,15 +39,13 @@ export class CategoryController {
   @ApiOkResponse({ description: 'Successful create' })
   @ApiForbiddenResponse({ description: 'No access, missing token, or invalid role' })
   @ApiBadRequestResponse({ description: 'The category did not pass validation' })
-  @ApiInternalServerErrorResponse({ description: 'Some database problem, such as a broken connection' })
-  async create(@Body() category: CreateCategoryDto): Promise<void> {
+  async create(@Body() category: CreateCategory): Promise<void> {
     await this.categoryService.create(category);
   }
 
   @Get()
   @UseGuards(JwtAuthGuard, RoleGuard(UserRole.ADMIN))
   @ApiOkResponse({ description: 'Successful get all categories', type: ApiResponse<Category[]> })
-  @ApiInternalServerErrorResponse({ description: 'Some database problem, such as a broken connection' })
   @ApiForbiddenResponse({ description: 'No access, missing token, or invalid role' })
   async findAll(): Promise<ApiResponse<Category[]>> {
     return {
@@ -56,12 +55,20 @@ export class CategoryController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard, RoleGuard(UserRole.ADMIN))
-  @ApiOkResponse({ description: 'Successful token regeneration' })
-  @ApiForbiddenResponse({ description: 'The refresh token may be invalid' })
-  @ApiBadRequestResponse({ description: 'The category did not pass validation' })
-  @ApiInternalServerErrorResponse({ description: 'Some database problem, such as a broken connection' })
+  @ApiOkResponse({ description: 'Successful update' })
+  @ApiForbiddenResponse({ description: 'No access, missing token, or invalid role' })
+  @ApiBadRequestResponse({ description: 'The category did not pass validation, or id doesnt exists' })
   async update(@Param('id', ParseObjectId, IsCategoryExists) id: Types.ObjectId,
-               @Body() category: UpdateCategoryDto): Promise<void> {
+               @Body() category: UpdateCategory): Promise<void> {
     await this.categoryService.update(id, category);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard(UserRole.ADMIN))
+  @ApiOkResponse({ description: 'Successful remove' })
+  @ApiForbiddenResponse({ description: 'No access, missing token, or invalid role' })
+  @ApiNotFoundResponse({ description: 'The id of category doesnt exists' })
+  async remove(@Param('id', ParseObjectId, IsCategoryExists) _id: Types.ObjectId): Promise<void> {
+    await this.categoryService.remove({ _id });
   }
 }

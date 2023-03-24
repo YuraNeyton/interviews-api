@@ -39,14 +39,10 @@ export class JwtService {
 
   private getTokenExp(type: TokenType): number {
     const defaultExp = 900; // default 15 min
-    // const expMap = {
-    //   [TokenType.ACCESS]: this.ACCESS_TOKEN_EXPIRATION * 60, // 15 min
-    //   [TokenType.REFRESH]: this.REFRESH_TOKEN_EXPIRATION * 60 * 4 * 360 // 15 days
-    // };
 
     const expMap = {
-      [TokenType.ACCESS]: 60,
-      [TokenType.REFRESH]: 60 * 3
+      [TokenType.ACCESS]: this.ACCESS_TOKEN_EXPIRATION * 60, // 15 min
+      [TokenType.REFRESH]: this.REFRESH_TOKEN_EXPIRATION * 60 * 4 * 360 // 15 days
     };
 
     return expMap[type] || defaultExp;
