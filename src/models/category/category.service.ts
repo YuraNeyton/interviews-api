@@ -21,4 +21,12 @@ export class CategoryService {
   async findAll(): Promise<Category[]> {
     return this.categoryModel.find({});
   }
+
+  async findOneById(id: Types.ObjectId): Promise<CategoryDocument | null> {
+    return this.categoryModel.findById(id);
+  }
+
+  async isNameExist(name: string): Promise<boolean> {
+    return !await this.categoryModel.findOne({ name });
+  }
 }

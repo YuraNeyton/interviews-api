@@ -25,6 +25,7 @@ import {
 
 import { CategoryService } from './category.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
+import { IsCategoryExists } from './pipes';
 import { Category } from './schemas';
 
 @Controller()
@@ -59,7 +60,8 @@ export class CategoryController {
   @ApiForbiddenResponse({ description: 'The refresh token may be invalid' })
   @ApiBadRequestResponse({ description: 'The category did not pass validation' })
   @ApiInternalServerErrorResponse({ description: 'Some database problem, such as a broken connection' })
-  async update(@Param('id', ParseObjectId) id: Types.ObjectId, @Body() category: UpdateCategoryDto): Promise<void> {
+  async update(@Param('id', ParseObjectId, IsCategoryExists) id: Types.ObjectId,
+               @Body() category: UpdateCategoryDto): Promise<void> {
     await this.categoryService.update(id, category);
   }
 }

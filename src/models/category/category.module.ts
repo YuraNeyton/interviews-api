@@ -4,6 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CommonModule } from '../../common';
 
 import { Category, CategorySchema } from './schemas';
+import { NameAlreadyExists } from './validations';
+import { IsCategoryExists } from './pipes';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
 
@@ -16,7 +18,9 @@ import { CategoryService } from './category.service';
       ])
   ],
   providers: [
-    CategoryService
+    CategoryService,
+    IsCategoryExists,
+    NameAlreadyExists
   ],
   controllers: [CategoryController]
 })

@@ -8,11 +8,11 @@ import { Types } from 'mongoose';
 
 @Injectable()
 export class ParseObjectId implements PipeTransform {
-  transform(value: any, metadata: ArgumentMetadata): Types.ObjectId {
-    if (!Types.ObjectId.isValid(value)) {
+  transform(id: string, metadata: ArgumentMetadata): Types.ObjectId {
+    if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException();
     }
 
-    return new Types.ObjectId(value);
+    return new Types.ObjectId(id);
   }
 }
