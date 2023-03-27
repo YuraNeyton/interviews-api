@@ -12,8 +12,8 @@ export class CategoryService {
   constructor(@InjectModel(Category.name) private categoryModel: Model<CategoryDocument>) {
   }
 
-  async create(category: CreateCategory): Promise<void> {
-    await this.categoryModel.create(category);
+  async create(category: CreateCategory): Promise<CategoryDocument> {
+    return this.categoryModel.create(category);
   }
 
   async update(_id: Types.ObjectId, valuesToUpdate: UpdateCategory): Promise<void> {

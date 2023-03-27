@@ -45,8 +45,10 @@ export class QuestionController {
   @ApiOkResponse({ description: 'Successful create' })
   @ApiForbiddenResponse({ description: 'No access, missing token, or invalid role' })
   @ApiBadRequestResponse({ description: 'The question did not pass validation' })
-  async create(@Body() question: CreateQuestion): Promise<void> {
-    await this.questionService.create(question);
+  async create(@Body() question: CreateQuestion): Promise<ApiResponse<Question>> {
+    return {
+      data: await this.questionService.create(question)
+    };
   }
 
   @Get()

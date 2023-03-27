@@ -16,8 +16,8 @@ export class QuestionService {
   constructor(@InjectModel(Question.name) private questionModel: Model<QuestionDocument>) {
   }
 
-  async create(question: CreateQuestion): Promise<void> {
-    await this.questionModel.create(question);
+  async create(question: CreateQuestion): Promise<QuestionDocument> {
+    return this.questionModel.create(question);
   }
 
   async update(_id: Types.ObjectId, valuesToUpdate: UpdateQuestion): Promise<void> {

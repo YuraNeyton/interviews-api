@@ -39,8 +39,10 @@ export class CategoryController {
   @ApiOkResponse({ description: 'Successful create' })
   @ApiForbiddenResponse({ description: 'No access, missing token, or invalid role' })
   @ApiBadRequestResponse({ description: 'The category did not pass validation' })
-  async create(@Body() category: CreateCategory): Promise<void> {
-    await this.categoryService.create(category);
+  async create(@Body() category: CreateCategory): Promise<ApiResponse<Category>> {
+    return {
+      data: await this.categoryService.create(category)
+    };
   }
 
   @Get()
