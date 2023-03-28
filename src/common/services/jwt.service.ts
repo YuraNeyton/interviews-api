@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken';
 
 import { TokenType } from '../enums';
 
-import { TokenPayload } from '../../models';
+import { TokenPayload } from '../../modules';
 
 @Injectable()
 export class JwtService {

@@ -11,6 +11,8 @@ import {
 } from './dto';
 import { Question, QuestionDocument } from './schemas';
 
+type AggregateWithTotal = { data: Question[], total: number };
+
 @Injectable()
 export class QuestionService {
   constructor(@InjectModel(Question.name) private questionModel: Model<QuestionDocument>) {
@@ -24,7 +26,8 @@ export class QuestionService {
     await this.questionModel.updateOne({ _id }, valuesToUpdate);
   }
 
-  async findAll(query: QuestionQuery): Promise<Aggregate<Question[]>> {
+  async findAll(query: QuestionQuery): Promise<AggregateWithTotal> {
+    const total = await this.questionModel.countDocuments();
     const pipeline = this.questionModel
       .aggregate([{
         '$lookup': {
@@ -61,7 +64,9 @@ export class QuestionService {
       pipeline.match({ developmentDirection: { $in: query.developmentDirection } });
     }
 
-    return pipeline;
+    const data = await pipeline;
+
+    return { data, total };
   }
 
   async findOneById(_id: Types.ObjectId): Promise<Aggregate<QuestionDocument | null>> {

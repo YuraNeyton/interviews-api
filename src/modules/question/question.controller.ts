@@ -57,8 +57,14 @@ export class QuestionController {
   @ApiOkResponse({ description: 'Successful get all questions', type: ApiResponse<Question[]> })
   @ApiForbiddenResponse({ description: 'No access, missing token, or invalid role' })
   async findAll(@Query() query: QuestionQuery): Promise<ApiResponse<Question[]>> {
+    const { data, total } = await this.questionService.findAll(query);
     return {
-      data: await this.questionService.findAll(query)
+      data,
+      metadata: {
+        total,
+        limit: query.limit,
+        offset: query.offset
+      }
     };
   }
 
