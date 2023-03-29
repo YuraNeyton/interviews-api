@@ -9,14 +9,18 @@ import { Category, CategoryDocument } from './schemas';
 
 @Injectable()
 export class CategoryService {
-  constructor(@InjectModel(Category.name) private categoryModel: Model<CategoryDocument>) {
-  }
+  constructor(
+    @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>
+  ) {}
 
   async create(category: CreateCategory): Promise<CategoryDocument> {
     return this.categoryModel.create(category);
   }
 
-  async update(_id: Types.ObjectId, valuesToUpdate: UpdateCategory): Promise<void> {
+  async update(
+    _id: Types.ObjectId,
+    valuesToUpdate: UpdateCategory
+  ): Promise<void> {
     await this.categoryModel.updateOne({ _id }, valuesToUpdate);
   }
 
@@ -29,7 +33,7 @@ export class CategoryService {
   }
 
   async exists(filter: ObjectMap): Promise<boolean> {
-    return !!await this.categoryModel.exists(filter);
+    return !!(await this.categoryModel.exists(filter));
   }
 
   async remove(filter: ObjectMap): Promise<void> {

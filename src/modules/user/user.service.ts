@@ -9,8 +9,7 @@ import { User, UserDocument } from './schemas';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {
-  }
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(user: CreateUserDto): Promise<void> {
     await this.userModel.create(user);
@@ -21,6 +20,6 @@ export class UserService {
   }
 
   async exists(filter: ObjectMap): Promise<boolean> {
-    return !!await this.userModel.exists(filter);
+    return !!(await this.userModel.exists(filter));
   }
 }

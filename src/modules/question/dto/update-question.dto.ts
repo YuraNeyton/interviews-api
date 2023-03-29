@@ -32,7 +32,6 @@ export class UpdateQuestion {
   @ArrayNotEmpty()
   categories: Types.ObjectId[];
 
-
   @ApiProperty({ enum: LevelOfPreparation })
   @IsOptional()
   @ArrayNotEmpty()

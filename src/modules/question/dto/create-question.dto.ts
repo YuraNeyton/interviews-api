@@ -3,14 +3,13 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsEnum,
+  IsMongoId,
   IsString,
-  MinLength,
-  IsMongoId
+  MinLength
 } from 'class-validator';
 import { Types } from 'mongoose';
 
 import { DevelopmentDirection, LevelOfPreparation } from '../../../common';
-
 import { IsTitleAlreadyExists } from '../decorators';
 
 export class CreateQuestion {
@@ -30,7 +29,6 @@ export class CreateQuestion {
   @IsMongoId({ each: true })
   @ArrayNotEmpty()
   categories: Types.ObjectId[];
-
 
   @ApiProperty({ enum: LevelOfPreparation })
   @ArrayNotEmpty()

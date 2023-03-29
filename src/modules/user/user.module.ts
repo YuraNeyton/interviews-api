@@ -7,13 +7,11 @@ import { EmailAlreadyExists } from './validations';
 
 @Module({
   imports: [
-    MongooseModule
-      .forFeature([
-        { name: User.name, schema: UserSchema, collection: 'users' }
-      ])
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema, collection: 'users' }
+    ])
   ],
   providers: [UserService, EmailAlreadyExists],
   exports: [UserService, EmailAlreadyExists]
 })
-export class UserModule {
-}
+export class UserModule {}

@@ -13,5 +13,4 @@ import { jwtConfig } from './session';
     })
   ]
 })
-export class MyConfigModule {
-}
+export class MyConfigModule {}

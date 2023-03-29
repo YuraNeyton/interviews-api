@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 
-import { TokenType } from '../enums';
-
 import { TokenPayload } from '../../modules';
+import { TokenType } from '../enums';
 
 @Injectable()
 export class JwtService {
@@ -14,10 +13,18 @@ export class JwtService {
   private readonly REFRESH_TOKEN_EXPIRATION: number;
 
   constructor(private configService: ConfigService) {
-    this.ACCESS_TOKEN_SECRET = this.configService.get<string>('access_token_secret');
-    this.REFRESH_TOKEN_SECRET = this.configService.get<string>('refresh_token_secret');
-    this.ACCESS_TOKEN_EXPIRATION = Number(this.configService.get<string>('access_token_expiration'));
-    this.REFRESH_TOKEN_EXPIRATION = Number(this.configService.get<string>('refresh_token_expiration'));
+    this.ACCESS_TOKEN_SECRET = this.configService.get<string>(
+      'access_token_secret'
+    );
+    this.REFRESH_TOKEN_SECRET = this.configService.get<string>(
+      'refresh_token_secret'
+    );
+    this.ACCESS_TOKEN_EXPIRATION = Number(
+      this.configService.get<string>('access_token_expiration')
+    );
+    this.REFRESH_TOKEN_EXPIRATION = Number(
+      this.configService.get<string>('refresh_token_expiration')
+    );
   }
 
   generateToken(payload: TokenPayload, type: TokenType): string {
@@ -58,4 +65,3 @@ export class JwtService {
     return secretMap[type] || defaultSecret;
   }
 }
-

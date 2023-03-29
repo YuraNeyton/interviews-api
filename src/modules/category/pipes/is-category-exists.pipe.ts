@@ -1,20 +1,13 @@
-import {
-  Injectable,
-  ArgumentMetadata,
-  NotFoundException,
-  PipeTransform
-} from '@nestjs/common';
+import { Injectable, NotFoundException, PipeTransform } from '@nestjs/common';
 import { Types } from 'mongoose';
 
 import { CategoryService } from '../category.service';
 
 @Injectable()
 export class IsCategoryExists implements PipeTransform {
+  constructor(private categoryService: CategoryService) {}
 
-  constructor(private categoryService: CategoryService) {
-  }
-
-  async transform(_id: Types.ObjectId, metadata: ArgumentMetadata): Promise<Types.ObjectId> {
+  async transform(_id: Types.ObjectId): Promise<Types.ObjectId> {
     const isExists = await this.categoryService.exists({ _id });
 
     if (!isExists) {

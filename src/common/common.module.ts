@@ -6,18 +6,7 @@ import { HashService, JwtService } from './services';
 
 @Module({
   imports: [],
-  providers: [
-    HashService,
-    JwtService,
-    JwtAuthGuard,
-    ParseObjectId
-  ],
-  exports: [
-    HashService,
-    JwtService,
-    JwtAuthGuard,
-    ParseObjectId
-  ]
+  providers: [HashService, JwtService, JwtAuthGuard, ParseObjectId],
+  exports: [HashService, JwtService, JwtAuthGuard, ParseObjectId]
 })
-export class CommonModule {
-}
+export class CommonModule {}

@@ -1,19 +1,16 @@
 import {
-  Injectable,
   BadRequestException,
   CanActivate,
   ExecutionContext,
+  Injectable
 } from '@nestjs/common';
 
 import { TokenType } from '../enums';
-
 import { JwtService } from '../services';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-
-  constructor(private jwtService: JwtService) {
-  }
+  constructor(private jwtService: JwtService) {}
 
   canActivate(ctx: ExecutionContext): boolean {
     const request = ctx.switchToHttp().getRequest();

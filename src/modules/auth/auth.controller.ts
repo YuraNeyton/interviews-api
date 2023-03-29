@@ -1,8 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
@@ -18,18 +14,22 @@ import { AuthService } from './services';
 
 @Controller()
 export class AuthController {
-  constructor(private authService: AuthService) {
-  }
+  constructor(private authService: AuthService) {}
 
   @Post('sign-up')
   @ApiOkResponse({ description: 'Successful registration' })
-  @ApiBadRequestResponse({ description: 'This email already exists or invalid format of email' })
+  @ApiBadRequestResponse({
+    description: 'This email already exists or invalid format of email'
+  })
   async signUp(@Body() credentials: SignUp): Promise<void> {
     await this.authService.signUp(credentials);
   }
 
   @Post('sign-in')
-  @ApiOkResponse({ description: 'Successful login', type: ApiResponse<AuthorizationTokens> })
+  @ApiOkResponse({
+    description: 'Successful login',
+    type: ApiResponse<AuthorizationTokens>
+  })
   @ApiNotFoundResponse({ description: 'Login or password do not match' })
   async signIn(@Body() credentials: SignIn): Promise<ApiResponse<AccessToken>> {
     return {

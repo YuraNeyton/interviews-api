@@ -12,12 +12,7 @@ const ROUTES: Routes = [
 ];
 
 @Module({
-  imports: [
-    AuthModule,
-    CategoryModule,
-    RouterModule.register(ROUTES)
-  ],
+  imports: [AuthModule, CategoryModule, RouterModule.register(ROUTES)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}

@@ -4,4 +4,3 @@ export interface AuthorizationTokens {
 }
 
 export type AccessToken = Omit<AuthorizationTokens, 'refreshToken'>;
-
