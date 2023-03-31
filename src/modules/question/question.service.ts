@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types, Aggregate } from 'mongoose';
+import { Aggregate, Model, Types } from 'mongoose';
 
 import { ObjectMap } from '../../common';
 
-import { CreateQuestion, UpdateQuestion, QuestionQuery } from './dto';
+import { CreateQuestion, QuestionQuery, UpdateQuestion } from './dto';
 import { Question, QuestionDocument } from './schemas';
 
 type AggregateWithTotal = { data: Question[]; total: number };
@@ -27,20 +27,7 @@ export class QuestionService {
   }
 
   async findAll(query: QuestionQuery): Promise<AggregateWithTotal> {
-    const total = await this.questionModel.countDocuments();
-    const pipeline = this.questionModel
-      .aggregate([
-        {
-          $lookup: {
-            from: 'categories',
-            localField: 'categories',
-            foreignField: '_id',
-            as: 'categories'
-          }
-        }
-      ])
-      .limit(query.offset + query.limit)
-      .skip(query.offset);
+    const pipeline = this.questionModel.aggregate();
 
     if (query.title) {
       pipeline.match({
@@ -51,9 +38,7 @@ export class QuestionService {
     if (query.categories) {
       pipeline.match({
         categories: {
-          $elemMatch: {
-            _id: { $in: query.categories.map((el) => new Types.ObjectId(el)) }
-          }
+          $in: query.categories.map((el) => new Types.ObjectId(el))
         }
       });
     }
@@ -68,9 +53,30 @@ export class QuestionService {
       });
     }
 
-    const data = await pipeline;
+    pipeline.lookup({
+      from: 'categories',
+      localField: 'categories',
+      foreignField: '_id',
+      as: 'categories'
+    });
 
-    return { data, total };
+    pipeline.facet({
+      paginatedResults: [
+        { $skip: query.offset },
+        { $limit: query.offset + query.limit }
+      ],
+      totalCount: [
+        {
+          $count: 'count'
+        }
+      ]
+    });
+
+    const [data] = await pipeline;
+    const { paginatedResults, totalCount } = data;
+    const [total] = totalCount;
+
+    return { data: paginatedResults, total: total?.count || 0 };
   }
 
   async findOneById(
