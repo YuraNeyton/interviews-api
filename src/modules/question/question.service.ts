@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Aggregate, Model, Types } from 'mongoose';
 
-import { ObjectMap } from '../../common';
+import { ObjectMap } from '@common';
 
 import { CreateQuestion, QuestionQuery, UpdateQuestion } from './dto';
 import { Question, QuestionDocument } from './schemas';

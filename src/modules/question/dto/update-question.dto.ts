@@ -3,14 +3,14 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsEnum,
-  IsString,
-  MinLength,
   IsMongoId,
-  IsOptional
+  IsOptional,
+  IsString,
+  MinLength
 } from 'class-validator';
 import { Types } from 'mongoose';
 
-import { DevelopmentDirection, LevelOfPreparation } from '../../../common';
+import { DevelopmentDirection, LevelOfPreparation } from '@common';
 
 export class UpdateQuestion {
   @ApiProperty()

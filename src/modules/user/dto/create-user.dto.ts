@@ -1,4 +1,4 @@
-import { UserRole } from '../../../common';
+import { UserRole } from '@common';
 
 export interface CreateUserDto {
   email: string;

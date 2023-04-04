@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { Types } from 'mongoose';
 
-import { DevelopmentDirection, LevelOfPreparation } from '../../../common';
+import { DevelopmentDirection, LevelOfPreparation } from '@common';
 
 export class QuestionQuery {
   @IsOptional()

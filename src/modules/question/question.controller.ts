@@ -24,7 +24,7 @@ import {
   ParseObjectId,
   RoleGuard,
   UserRole
-} from '../../common';
+} from '@common';
 
 import { CreateQuestion, QuestionQuery, UpdateQuestion } from './dto';
 import { IsQuestionExists } from './pipes';

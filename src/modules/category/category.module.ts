@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { CommonModule } from '../../common';
+import { CommonModule } from '@common';
 
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';

@@ -19,10 +19,10 @@ import { Types } from 'mongoose';
 import {
   ApiResponse,
   JwtAuthGuard,
+  ParseObjectId,
   RoleGuard,
-  UserRole,
-  ParseObjectId
-} from '../../common';
+  UserRole
+} from '@common';
 
 import { CategoryService } from './category.service';
 import { CreateCategory, UpdateCategory } from './dto';
@@ -51,7 +51,7 @@ export class CategoryController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard, RoleGuard(UserRole.ADMIN))
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({
     description: 'Successful get all categories',
     type: ApiResponse<Category[]>

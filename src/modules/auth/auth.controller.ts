@@ -6,7 +6,7 @@ import {
   ApiOkResponse
 } from '@nestjs/swagger';
 
-import { ApiResponse, GetJwt } from '../../common';
+import { ApiResponse, GetJwt } from '@common';
 
 import { SignIn, SignUp } from './dto';
 import { AccessToken, AuthorizationTokens } from './interfaces';
