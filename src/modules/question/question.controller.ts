@@ -26,7 +26,12 @@ import {
   UserRole
 } from '@common';
 
-import { CreateQuestion, QuestionQuery, UpdateQuestion } from './dto';
+import {
+  CreateQuestion,
+  QuestionQuery,
+  QuestionWithoutAttributesQuery,
+  UpdateQuestion
+} from './dto';
 import { IsQuestionExists } from './pipes';
 import { QuestionService } from './question.service';
 import { Question } from './schemas';
@@ -66,6 +71,32 @@ export class QuestionController {
     @Query() query: QuestionQuery
   ): Promise<ApiResponse<Question[]>> {
     const { data, total } = await this.questionService.findAll(query);
+
+    return {
+      data,
+      metadata: {
+        total,
+        limit: query.limit,
+        offset: query.offset
+      }
+    };
+  }
+
+  @Get('preview')
+  @ApiQuery({})
+  @ApiOkResponse({
+    description: 'Successful get all questions',
+    type: ApiResponse<Question[]>
+  })
+  async preview(
+    @Query() query: QuestionWithoutAttributesQuery
+  ): Promise<ApiResponse<Question[]>> {
+    const previewQuery = {
+      ...query,
+      attributes: ['title']
+    };
+    const { data, total } = await this.questionService.findAll(previewQuery);
+
     return {
       data,
       metadata: {

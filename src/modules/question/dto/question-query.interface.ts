@@ -11,7 +11,7 @@ import { Types } from 'mongoose';
 
 import { DevelopmentDirection, LevelOfPreparation } from '@common';
 
-export class QuestionQuery {
+export class QuestionWithoutAttributesQuery {
   @IsOptional()
   @Transform((limit) => parseInt(limit.value), { toClassOnly: true })
   limit = 10;
@@ -22,21 +22,28 @@ export class QuestionQuery {
 
   @IsOptional()
   @IsString()
-  title: string;
+  title?: string;
 
   @IsOptional()
   @IsArray()
   @IsMongoId({ each: true })
   @ArrayNotEmpty()
-  categories: Types.ObjectId[];
+  categories?: Types.ObjectId[];
 
   @IsOptional()
   @ArrayNotEmpty()
   @IsEnum(LevelOfPreparation, { each: true })
-  levelOfPreparation: LevelOfPreparation[];
+  levelOfPreparation?: LevelOfPreparation[];
 
   @IsOptional()
   @ArrayNotEmpty()
   @IsEnum(DevelopmentDirection, { each: true })
-  developmentDirection: DevelopmentDirection[];
+  developmentDirection?: DevelopmentDirection[];
+}
+
+export class QuestionQuery extends QuestionWithoutAttributesQuery {
+  @IsOptional()
+  @ArrayNotEmpty()
+  @IsString()
+  attributes?: string[];
 }

@@ -60,6 +60,19 @@ export class QuestionService {
       as: 'categories'
     });
 
+    if (query.attributes) {
+      const projectArg: ObjectMap = query.attributes.reduce(
+        (project, attribute) => {
+          project[attribute] = 1;
+
+          return project;
+        },
+        {}
+      );
+
+      pipeline.project(projectArg);
+    }
+
     pipeline.facet({
       paginatedResults: [
         { $skip: query.offset },
