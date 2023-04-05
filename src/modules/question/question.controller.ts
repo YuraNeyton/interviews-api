@@ -93,7 +93,7 @@ export class QuestionController {
   ): Promise<ApiResponse<Question[]>> {
     const previewQuery = {
       ...query,
-      attributes: ['title']
+      attributes: ['title', 'categories']
     };
     const { data, total } = await this.questionService.findAll(previewQuery);
 
