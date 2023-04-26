@@ -14,7 +14,7 @@ import { DevelopmentDirection, LevelOfPreparation } from '@common';
 export class QuestionWithoutAttributesQuery {
   @IsOptional()
   @Transform((limit) => parseInt(limit.value), { toClassOnly: true })
-  limit = 10;
+  limit = 1000;
 
   @IsOptional()
   @Transform((offset) => parseInt(offset.value), { toClassOnly: true })
